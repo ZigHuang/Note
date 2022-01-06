@@ -109,15 +109,30 @@ static final class NonfairSync extends Sync {
 - 非公平锁会先尝试获取资源，失败后再执行`acquire(1)`
 - 公平锁则直接执行`acquire(1)`
 
-这里的`acquire(1)`是AQS内的方法
+这里的`acquire(1)`是使用了AQS内的方法
 
-尝试获取资源失败则加入等待队列
+> 上文提到
+>
+> FairSync / UnfairSync 继承自 Sync，Sync继承自AQS
+
+尝试获取资源**失败**则加入**Sync等待队列**
 
 ```java
+// AQS内方法
 public final void acquire(int arg) {
         if (!tryAcquire(arg) &&
             acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
             selfInterrupt();
+    }
+```
+
+其中AQS中的`tryAcquire()`方法是留给子类实现的模版方法(设计模式)
+
+```java
+// AQS内方法
+// Main exported methods
+protected boolean tryAcquire(int arg) {
+        throw new UnsupportedOperationException();
     }
 ```
 
@@ -154,8 +169,6 @@ static final class FairSync extends Sync {
         }
     }
 ```
-
-
 
 ## 总结
 
