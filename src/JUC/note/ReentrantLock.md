@@ -23,11 +23,11 @@ Sync类继承自AbstractQueuedSynchronizer(下面简称为AQS)抽象类，内部
 ```java
 // 获取资源操作(加锁)
 final boolean nonfairTryAcquire(int acquires) {
-  					// 获取当前线程
+            // 获取当前线程
             final Thread current = Thread.currentThread();
-  					// 获取状态  
+            // 获取状态  
             int c = getState();
-  					// 0表示没有线程竞争时 尝试加锁
+            // 0表示没有线程竞争时 尝试加锁
             if (c == 0) {
               	// 比较并设置状态 基于Unsafe包CAS的支持
                 if (compareAndSetState(0, acquires)) {
@@ -36,7 +36,7 @@ final boolean nonfairTryAcquire(int acquires) {
                     return true;
                 }
             }
-  					// 当线程 已经拥有该锁了--重点！
+            // 当线程 已经拥有该锁了--重点！
             else if (current == getExclusiveOwnerThread()) {
               	// 增加重入次数
                 int nextc = c + acquires;
@@ -48,24 +48,24 @@ final boolean nonfairTryAcquire(int acquires) {
                 // 重入操作成功
                 return true;
             }
-  					// 失败
+            // 失败
             return false;
         }
 
 // 以独占模式释放资源操作(解锁)
 protected final boolean tryRelease(int releases) {
             int c = getState() - releases;
-  					// 当前线程不为独占线程 抛出异常
+            // 当前线程不为独占线程 抛出异常
             if (Thread.currentThread() != getExclusiveOwnerThread())
                 throw new IllegalMonitorStateException();
             boolean free = false;
-  					// 当状态为0(可重入次数为0) 释放资源
+  			// 当状态为0(可重入次数为0) 释放资源
             if (c == 0) {
                 free = true;
               	// 设置独占资源线程为null(释放资源)
                 setExclusiveOwnerThread(null);
             }
-  					// 当状态不为0时，可重入次数降低
+  			// 当状态不为0时，可重入次数降低
             setState(c);
             return free;
         }
