@@ -6,9 +6,9 @@
 
 看看其内部结构 如下图所示：
 
-![()
+![](../img/ReentrantReadWriteLock.png)
 
-![]()
+
 
 实现起来也比可重入锁复杂一些
 
@@ -122,6 +122,8 @@ static int exclusiveCount(int c) { return c & EXCLUSIVE_MASK; }
 
 #### tryAcquire()
 
+> 写锁的lock()方法会调用该函数
+
 独占模式获取资源，重写AQS中的模版方法，既然是独占模式，则该函数是用于 **写锁的获取**
 
 ```java
@@ -178,6 +180,8 @@ protected final boolean tryAcquire(int acquires) {
 
 #### tryRelease()
 
+> 写锁的`unlock()`方法会调用该方法
+
 独占模式释放资源，重写AQS中的模版方法，用于表示**写线程释放资源操作**
 
 ```java
@@ -205,6 +209,14 @@ protected final boolean tryRelease(int releases) {
 
 #### tryAcquireShared()
 
+> 读锁的`lock()`方法最终会调用到该方法
+
+注意⚠️：该方法返回的值为 **整数**
+
+- 返回 **-1** 表示失败
+    - **-1** 时，会调用AQS中的`doAcquireShared()`方法，此时该失败线程会进入一个阻塞队列里，进行资源的排队尝试获取/排队
+- 返回 **1** 表示成功获取
+
 共享模式获取资源，重写AQS中的模版方法，用于表示**读线程获取资源操作**
 
 ```java
@@ -219,7 +231,7 @@ protected final int tryAcquireShared(int unused) {
         return -1;
   	// 读锁数量
     int r = sharedCount(c);
-  	// 读线程是否被阻塞 且 读锁数量小于最大数量 且 CAS操作成功
+  	// 读线程是否被阻塞 且 读锁数量小于最大数量 且 CAS操作成功(读锁+1)
     if (!readerShouldBlock() &&
         r < MAX_COUNT &&
         compareAndSetState(c, c + SHARED_UNIT)) {
@@ -257,6 +269,8 @@ protected final int tryAcquireShared(int unused) {
 
 
 ### tryReleaseShared()
+
+> 读锁的unlock()操作会调用该方法
 
 共享模式获取资源，重写AQS中的模版方法，用于表示**读线程释放资源操作**
 
@@ -296,12 +310,12 @@ protected final boolean tryReleaseShared(int unused) {
     for (;;) {
        	// 获取状态
         int c = getState();
+      	// 获取读锁 -1 后的值
         int nextc = c - SHARED_UNIT;
+        // 尝试进行CAS
         if (compareAndSetState(c, nextc))
-            // Releasing the read lock has no effect on readers,
-            // but it may allow waiting writers to proceed if
-            // both read and write locks are now free.
             return nextc == 0;
     }
 }
 ```
+
