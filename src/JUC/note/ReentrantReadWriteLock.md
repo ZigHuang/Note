@@ -161,7 +161,7 @@ protected final boolean tryAcquire(int acquires) {
 
 这里有一张流程图，来更好的理解这个过程：
 
-![截屏2022-01-07 下午11.36.43](/Users/kokorozashiguohuang/Library/Application Support/typora-user-images/截屏2022-01-07 下午11.36.43.png)
+![](../img/ReentrantReadWriteLock_2.png)
 
 自己的话总结一下：
 
