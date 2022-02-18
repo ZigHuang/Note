@@ -26,6 +26,9 @@
 
 - 🔒[ReentrantReadWriteLock的基础实现](https://github.com/Super-ZZGuo/Note/blob/master/src/JUC/note/ReentrantReadWriteLock.md) （部分源码阅读）
 
+### 数据库：
+- 🔒[简单总结一下MVCC](https://github.com/Super-ZZGuo/Note/blob/master/src/DB/note/mvcc.md) （简单总结）
+
 ### 分布式：
 
 - 🔢️[Seata的AT事务实现过程](https://github.com/Super-ZZGuo/Note/blob/master/src/Seata/note/Seata.md) （周末不码）
