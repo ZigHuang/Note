@@ -27,7 +27,8 @@
 - 🔒[ReentrantReadWriteLock的基础实现](https://github.com/Super-ZZGuo/Note/blob/master/src/JUC/note/ReentrantReadWriteLock.md) （源码阅读）
 
 ### 数据库：
-- 🔒[简单总结一下MVCC](https://github.com/Super-ZZGuo/Note/blob/master/src/DB/note/mvcc.md) （简单总结）
+- 📔[简单总结一下MVCC](https://github.com/Super-ZZGuo/Note/blob/master/src/DB/note/mvcc.md) （简单总结）
+- 🔍[谈谈缓存与数据库一致性问题](https://github.com/Super-ZZGuo/Note/blob/master/src/DB/note/data_consistency.md) （学习记录）
 
 ### 分布式：
 
